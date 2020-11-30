@@ -4,10 +4,10 @@
 
 Game game;
 
-int main()
-{
-	GameData gameData;
+int main() {
+	//game.run();
 
+	GameData gameData;
 	Location* startLocation = gameData.getStartLocation();
 
 	if (startLocation == nullptr) {
@@ -17,15 +17,17 @@ int main()
 
 	std::cout << "Start Location is " << startLocation->id << ": " << startLocation->text << "\n";
 
-
-	//THIS THING IS BROKEN
+	//If there are more than one item in the choices vector of the startLocation, set a local var to the location id of the first choice in the startLocation
+	//Then set a local var to a specific room id that we provide locally here
+	//If the location we asked for exists, print its text
 	if (startLocation->choices.size() > 0) {
-		const std::string& secondLocationId = startLocation->choices[0].nextLocationId;
-		Location* secondLocation = gameData.getLocationWithId(secondLocation);
+		const std::string& secondLocationId = startLocation->choices[0].locationId;
+		Location* secondLocation = gameData.getLocationWithId("room2");
 
 		if (secondLocation != nullptr) {
 			std::cout << "Possible Second Location: " << secondLocation->text << "\n";
 		}
 
-	return (0);
+		return (0);
+	}
 }
