@@ -1,0 +1,25 @@
+#bed01
+You open your eyes.
+It is still dark outside, and your bed is soft and warm. You have to get up though. You know you have to.
+&bed02: Stay in bed
+&bedroom03: Get up
+===
+#bed02
+You roll over and close your eyes.
+Seconds later, your neighbor drops something heavy in the room next door. What even was that?
+Someone might just as well have dropped their dumbbells right on top of you. No use trying to sleep more now.
+&bedroom04: Get up yawning
+&kitchen05: Jump out of bed
+===
+#bedroom03
+You open your wardrobe to get dressed. Without thinking much about it, you grab that wonderfully comfortable old shirt that you'll eventually love to pieces.
+&ID: Choice text
+===
+#bedroom04
+Location text
+&ID: Choice text
+===
+#kitchen05
+Location text
+&ID: Choice text
+===
