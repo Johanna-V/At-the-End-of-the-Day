@@ -3,6 +3,10 @@
 
 //Definition of the Game class that runs the game
 void Game::run() {
+	// De-comment to print all locations
+	std::cout << "Debugging Locations\n";
+	gameData.debugLocations();
+	
 	std::cout << "Welcome to 'At the End of the Day'! Let's see what our day holds for us. \n";
 
 	//Setting the player location to the start location. 
@@ -56,9 +60,4 @@ void Game::run() {
 	}
 
 	std::cout << "You made " << player.moves << " moves! \n";
-
-	/* De-comment to print all locations
-	std::cout << "Debugging Locations\n";
-	gameData.debugLocations();
-	*/
 }

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 
 //Represents the choices that a user can make after reading the text for a location (Id, Text)
 struct LocationChoice {
@@ -25,8 +26,10 @@ public:
 	void debugLocations(); //This function will print all of the locations in the game out in order.
 	Location* getStartLocation(); //Gets the start location or returns nullptr
 	Location* getLocationWithId(const std::string& id); //Searches for location with id
+	int loadLocationData(const std::string& path); //Reads locations from text file
 private:
 	void createLocations(); //This function should be called in the constructor to setup the world locations.
+	void InitializeLocations();//loads the locations split over multiple files starting on locations1 and incrementing to a maximum amount of files. In my case i only have one so far
 	std::vector<Location> locations; //The storage for the locations will be hidden from users of this class.
 };
 
