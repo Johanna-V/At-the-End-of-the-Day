@@ -16,7 +16,7 @@ Location::Location(const std::string& anId, const std::string& aText)
 }
 
 GameData::GameData() {
-	createLocations(); //The first location is in here, below and loads with this function call
+	createLocations(); //The first location is in here, below and loads with this function call. I just want to remember that this is another way of adding locations :P
 	InitializeLocations(); //The rest of the locations are in a text file that this loads them from
 }
 
@@ -33,13 +33,6 @@ void GameData::createLocations() {
 	room1.choices.push_back(LocationChoice("exit", "Exit"));
 	locations.push_back(room1);
 
-	//Trying to get the game to use the text file locations instead but there are problems
-	/*Location room2("room2", "You are in the second room of this story.");
-	room2.choices.push_back(LocationChoice("exit", "Exit"));
-	locations.push_back(room2);
-
-	Location exit("exit", "This is the exit! :o");
-	locations.push_back(exit);*/
 }
 
 Location* GameData::getStartLocation() {
@@ -70,7 +63,7 @@ int GameData::loadLocationData(const std::string& path) {
 		return 0;
 	}
 
-	//"create a location object called "workingLocation" with empty ID and Text"
+	//location object called "workingLocation" with empty ID and Text
 	Location workingLocation("", "");
 	
 	std::string line;
@@ -79,7 +72,7 @@ int GameData::loadLocationData(const std::string& path) {
 	if (locationsFile.is_open()) {
 
 		while (std::getline(locationsFile, line)) {
-			//Error handling from my saviour, Ingeborg! Skips forward if first character is /
+			//Skips forward if first character is / or if the line is empty. This allows comments in the text file.
 			if (line.length() == 0 || line[0] == '/') {
 				continue;
 			}
@@ -110,11 +103,14 @@ int GameData::loadLocationData(const std::string& path) {
 				//add the current "workingLocation" object to your location list
 				//"location" may be the problem here if something breaks
 				locations.push_back(workingLocation);
+				
+				workingLocation.text.clear(); //I had a HUGE problem since I did not include this row before: clearing the text each loop. Not doing that results in getting all text for all locations if the loop manages to get all lines before the player acts.
 				workingLocation.choices.clear();
 				workingLocation.id.clear();
 				++locationsAdded;
 				continue;
 			}
+			//This sets everything in each line (without #, & or = in the start) as the current text for the workingLocation.
 			else {
 				workingLocation.text += line.substr(0, line.npos) + "\n";
 			}
@@ -124,7 +120,8 @@ int GameData::loadLocationData(const std::string& path) {
 		return true;
 	}
 	else {
-	std::cout << "Unable to open " << path << "Please check that the path is correct";
+	std::cout << "Unable to open " << path << ". Please check that the path is correct.\n";
+	std::cout << "The filename has to follow the functionality of InitializeLocations() in gamedata.cpp: it has to be 'locations[a number].txt'.";
 	}
 	return false;
 }	
@@ -140,7 +137,7 @@ void GameData::InitializeLocations()
 		if (!load)
 		{
 			std::cout << "Warning couldn't load" << fileToLoad << " double check the adress exists\n";
-			return;//break loop if a file could not load a file
+			return;//break loop if a file could not be loaded
 		}
 	}
 }

@@ -13,13 +13,20 @@ Someone might just as well have dropped their dumbbells right on top of you. No 
 ===
 #bedroom03
 You open your wardrobe to get dressed. Without thinking much about it, you grab that wonderfully comfortable old shirt that you'll eventually love to pieces.
-&ID: Choice text
+&kitchen05: Go to kitchen
 ===
 #bedroom04
-Location text
-&ID: Choice text
+You take your time, stretching each muscle in your body. Get dressed? Nah, sweatpants and a t-shirt is good enough.
+&kitchen06: Drag yourself to the kitchen
 ===
 #kitchen05
-Location text
+You hit the lightswitch but nothing happens. You step on something crunchy that cuts your foot.
 &ID: Choice text
+===
+#kitchen06
+Wow, it's bright out here. "How long did I actually sleep?" And what the hell happened here?
+&ID: Choice text
+===
+#exit
+This is the exit! :o
 ===
