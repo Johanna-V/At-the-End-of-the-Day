@@ -1,6 +1,9 @@
 #include <iostream>
 #include "game.h"
 
+//String with the filename to use when saving and loading from the menu
+const std::string SAVE_PATH = "save_game.txt";
+
 //Definition of the Game class that runs the game
 void Game::run() {
 	/* De-comment to print all locations
@@ -17,7 +20,6 @@ void Game::run() {
 			break;
 
 		case GameMode::InGame:
-
 				runGame();
 				break;
 
@@ -31,8 +33,9 @@ void Game::run() {
 
 void Game::runMainMenu() {
 	std::cout << "\n MAIN MENU \n";
-	std::cout << "[1] Resume Game \n";
-	std::cout << "[2] Exit Game \n";
+	std::cout << "[1] Start Game \n";
+	std::cout << "[2] Load Game \n";
+	std::cout << "[3] Exit Game \n";
 
 	//NOT DONE
 	while (true) {
@@ -55,7 +58,13 @@ void Game::runMainMenu() {
 			return;
 		}
 
-		else if (menuChoice == 2) {
+		//There is something wrong here
+		if (menuChoice == 2) {
+			loadGame(SAVE_PATH);
+			gameMode = GameMode::InGame;
+			return;
+		}
+		else if (menuChoice == 3) {
 			gameMode = GameMode::None;
 			return;
 		}
@@ -67,12 +76,13 @@ void Game::runMainMenu() {
 
 void Game::runGame() {
 
-	/******* THIS WAS MOVED IN HERE BECAUSE OF THE GAME MODES.
-
-	Setting the player location to the start location.
+	/*Setting the player location to the start location.
 	Player is lowercase here since this is the member of the Game class.
 	The Game class wraps around the Player (and GameData) struct.*/
 
+	/*the below line is blocking "Load Game" from working when in runMainMenu() 
+	(if the game is already running, there is no problem)
+	However, if I remove it from here, "Start Game" will not work. How do i solve this?*/
 	player.currentLocation = gameData.getStartLocation();
 
 	while (gameMode==GameMode::InGame) {
@@ -145,9 +155,8 @@ void Game::runGame() {
 		//After the error handling loop, we can now deal with the input for real because we know it is valid
 
 		if (input[0] == 'm' || input[0] == 'M') {
-			//*********NOT DONE This function does not exist yet: handleInGameMenu();
-			//In the meantime this is what we do instead:
-			gameMode = GameMode::MainMenu;
+			handleInGameMenu();
+			//gameMode = GameMode::MainMenu;
 		}
 		else if (input[0] == 'i' || input[0] == 'I') {
 			//*********NOT DONE This function does not exist yet: handleInventory()
@@ -156,7 +165,7 @@ void Game::runGame() {
 			gameMode = GameMode::MainMenu;
 		}
 		else {
-			//set a var 'nextLocationId' to the locationId in the vector 'choices', that the player chose ('choice' var)
+		//set a var 'nextLocationId' to the locationId in the vector 'choices', that the player chose ('choice' var)
 		//use the gameData function 'getLocationWithId' to search for and get the location with the chosen Id
 		//increment the number of moves the player has made
 			const std::string& nextLocationId = player.currentLocation->choices[choice].locationId;
@@ -164,12 +173,123 @@ void Game::runGame() {
 			player.moves++;
 		}
 
-		//set a var 'nextLocationId' to the locationId in the vector 'choices', that the player chose ('choice' var)
-		//use the gameData function 'getLocationWithId' to search for and get the location with the chosen Id
-		//increment the number of moves the player has made
-		/*const std::string& nextLocationId = player.currentLocation->choices[choice].locationId;
-		player.currentLocation = gameData.getLocationWithId(nextLocationId);
-		player.moves++;*/
 	}
 
+}
+
+void Game::handleInGameMenu() {
+	std::cout << "\n" << "Please select an option.\n";
+	std::cout << " [1] Continue Game\n";
+	std::cout << " [2] Save Game\n";
+	std::cout << " [3] Load Last Save\n";
+	std::cout << " [4] Exit Game\n";
+
+	while (true) {
+		std::string gamemenuInput;
+		std::cout << "> ";
+		std::getline(std::cin, gamemenuInput);
+		int gamemenuChoice = 0;
+
+		//Handling exceptions
+		try {
+			gamemenuChoice = std::stoi(gamemenuInput);
+		}
+		catch (std::exception ex) {
+			std::cout << "Invalid game menu input.\n";
+			continue;
+		}
+
+		/*Go back to the game. The game will not restart from the beginning
+		since we are using this handleInGameMenu() function and "return" here.
+		return just goes back to where we were before running this function.
+		I am still confused as to why we have a separate runMainMenu() function though 
+		- I think it is because the player should only be able to save if they are currently playing.*/
+		if (gamemenuChoice == 1) {
+			gameMode = GameMode::InGame;
+			return;
+		}
+
+		//Save the current game (staying in the menu)
+		if (gamemenuChoice == 2) {
+			saveGame(SAVE_PATH);
+			return;
+		}
+
+		else if (gamemenuChoice == 3) {
+			loadGame(SAVE_PATH);
+			gameMode = GameMode::InGame;
+			return;
+		}
+
+		//Exit the game (without saving)
+		else if (gamemenuChoice == 4) {
+			gameMode = GameMode::None;
+			return;
+		}
+
+	}
+
+}
+
+void Game::saveGame(const std::string& path) {
+	//Open a file to output stuff to
+	std::ofstream file(path);
+
+	//Display error if the file can't be created/opened
+	if (file.is_open() == false) {
+		std::cout << "Failed to write save game: " << path << "\n";
+		return;
+	}
+
+	//Now output things to the file
+
+	/* No player name yet :(
+	file << player.name << "\n";*/
+
+	file << player.currentLocation->id << "\n";
+
+	file << player.moves << "\n";
+
+	//Inventory stuff can go here when there is one
+
+	//Comma separated list of visited locations (for later)
+	for (size_t i = 0; i < player.visitedLocations.size(); ++i) {
+		if (i > 0) {
+			file << ",";
+		}
+		file << player.visitedLocations[i];
+	}
+	file << "\n";
+}
+
+void Game::loadGame(const std::string& path) {
+	//Open a file to read
+	std::ifstream file(path);
+
+	//Display error if the file can't be opened
+	if (file.is_open() == false) {
+		std::cout << "Failed to read save game: " << path << "\n";
+		return;
+	}
+
+	//Now we read the file content line by line
+	std::string line;
+
+	/*I don't have any player name yet...:(
+	1: Player Name
+	std::getline(file, line);
+	player.name = line;*/
+
+	//2: Send the player to the saved current location
+	std::getline(file, line);
+	player.currentLocation = gameData.getLocationWithId(line);
+
+	//3: Use the number of moves from the save
+	std::getline(file, line);
+	player.moves = std::stoi(line);
+
+	/* This seems to use something from the inventory stuff that I have been skipping, so let's wait with this
+	std::getline(file, line);
+	player.visitedLocations = split(line, ',');
+	*/
 }

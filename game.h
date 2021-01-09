@@ -18,9 +18,16 @@ public:
 	void run();
 
 private:
-	//THIS ONE IS OBSOLETE AFTER ADDING GAME MODES: bool isRunning = true;
+	//THIS ONE IS OBSOLETE AFTER ADDING GAME MODES: "bool isRunning = true;"
 	void runMainMenu();
 	void runGame();
+
+	void handleInGameMenu();
+
+	void saveGame(const std::string& path);
+	void loadGame(const std::string& path);
+
+	void handleInventory();
 
 	GameMode gameMode = GameMode::MainMenu;
 };

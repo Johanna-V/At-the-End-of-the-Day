@@ -1,32 +1,52 @@
 #bed01
 You open your eyes.
 It is still dark outside, and your bed is soft and warm. You have to get up though. You know you have to.
-&bed02: Stay in bed
-&bedroom03: Get up
+&bed02:Stay in bed
+&goodbedroom03:Get up
 ===
 #bed02
 You roll over and close your eyes.
 Seconds later, your neighbor drops something heavy in the room next door. What even was that?
 Someone might just as well have dropped their dumbbells right on top of you. No use trying to sleep more now.
-&bedroom04: Get up yawning
-&kitchen05: Jump out of bed
+&slowbedroom04:Get up yawning
+&darkkitchen05:Jump out of bed
 ===
-#bedroom03
+#goodbedroom03
 You open your wardrobe to get dressed. Without thinking much about it, you grab that wonderfully comfortable old shirt that you'll eventually love to pieces.
-&kitchen05: Go to kitchen
+&kitchen05:Go to kitchen
 ===
-#bedroom04
+#slowbedroom04
 You take your time, stretching each muscle in your body. Get dressed? Nah, sweatpants and a t-shirt is good enough.
-&kitchen06: Drag yourself to the kitchen
+&latekitchen06:Drag yourself to the kitchen
 ===
-#kitchen05
-You hit the lightswitch but nothing happens. You step on something crunchy that cuts your foot.
-&ID: Choice text
+#darkkitchen05
+You hit the lightswitch in the kitchen, but nothing happens. You step on something crunchy that cuts your foot.
+&glassbedroom06:Retreat and inspect foot
+&bloodybathroom01:Stumble to the bathroom through darkness
 ===
-#kitchen06
+#latekitchen06
 Wow, it's bright out here. "How long did I actually sleep?" And what the hell happened here?
-&ID: Choice text
+&ID:Choice text
 ===
+#bloodybathroom01
+Ow, ow, OW!
+Your feet are now full of the broken glass plate that used to cover your trophy cabinet.
+You are bleeding, and probably not going anywhere today. Or are you?
+&bloodykitchen07:"It's just a scratch." Pick those bastards out, wash up and then inspect what happened.
+&er01:"I'm DYING!" Call 911.
+===
+#glassbedroom06
+There's a working lamp in the bedroom.
+You inspect your foot and drag out a small peice of glass.
+&:
+===
+#bloodykitchen07
+&:
+===
+#er01
+&:
+===
+
 #exit
 This is the exit! :o
 ===
